@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SRM Attendance Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1f2937;--mut:#6b7280;--bd:#e5e7eb;--soft:#f3f4f6;--brand:#2563eb;--star:#16a34a;--safe:#2563eb;--danger:#d97706;--irr:#dc2626;--sh:0 1px 3px rgba(0,0,0,.06);--fh:"Sora",system-ui,sans-serif;--fb:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111827;--card:#1f2937;--tx:#f3f4f6;--mut:#9ca3af;--bd:#374151;--soft:#283244;--sh:none}}
+:root[data-theme="dark"]{--bg:#111827;--card:#1f2937;--tx:#f3f4f6;--mut:#9ca3af;--bd:#374151;--soft:#283244;--sh:none}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 var(--fb)}h1,h2,h3,b,.num{font-family:var(--fh)}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:#1f2937;color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:26px}.logo{width:42px;height:42px;border-radius:12px;background:#f59e0b;display:grid;place-items:center;font:800 .9rem var(--fh);color:#111}
+.brand b{display:block;font-size:.84rem;line-height:1.2}.brand span{font-size:.68rem;opacity:.65}
+.side nav button,.bnav button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;color:rgba(255,255,255,.72);padding:11px 14px;border-radius:10px;font:600 .92rem var(--fb);cursor:pointer;margin-bottom:3px;text-align:left;position:relative}
+.side nav button:hover{background:rgba(255,255,255,.07)}.side nav button.on{background:#374151;color:#fff}.side nav i{font-style:normal;font-size:1.1rem}
+.side .foot{margin-top:auto;background:#111827;border-radius:12px;padding:14px;font-size:.78rem;line-height:1.45;color:#d1d5db}.side .foot b{display:block;font-size:.85rem;margin-bottom:2px;color:#fff}
+.bdg{margin-left:auto;background:var(--irr);color:#fff;border-radius:99px;padding:1px 8px;font:700 .68rem var(--fb)}
+.main{min-width:0}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+.crumb small{display:block;color:var(--mut);font-size:.72rem;font-weight:600}.crumb b{font-size:1.08rem}
+.ctx{border:1px solid var(--bd);background:var(--soft);color:var(--tx);border-radius:99px;padding:8px 16px;font:700 .8rem var(--fb);cursor:pointer}
+.pg{display:none;padding:24px 28px 40px;max-width:1150px}.pg.on{display:block}
+.hero{border-radius:16px;padding:20px 24px;background:var(--card);border:1px solid var(--bd);border-left:5px solid var(--brand);margin-bottom:20px}
+.hero small{color:var(--brand);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.68rem}.hero h1{margin:4px 0;font-size:1.55rem;letter-spacing:-.02em}.hero p{margin:0;color:var(--mut);max-width:560px}
+h2.sec{font-size:1rem;margin:26px 0 12px;display:flex;align-items:center;gap:10px}h2.sec::after{content:"";flex:1;height:1px;background:var(--bd)}
+.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:1fr 1fr}.g21{grid-template-columns:1.4fr 1fr}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px;box-shadow:var(--sh)}
+.card h3{margin:0 0 4px;font-size:.96rem}.hint{color:var(--mut);font-size:.84rem;margin:0 0 12px}
+.kpi{display:flex;gap:14px;align-items:center}.kpi .num{font-size:1.8rem;font-weight:800;line-height:1;letter-spacing:-.03em}.kpi span{color:var(--mut);font-size:.8rem;display:block;margin-top:4px}
+.ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.25rem;flex:none;background:var(--soft)}
+.w small{color:var(--mut);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}.w b{display:block;font-size:1.05rem;margin:6px 0;line-height:1.25}.w .num{font-size:1.9rem}
+.tag{display:inline-block;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:99px;color:#fff}
+.t-star{background:var(--star)}.t-safe{background:var(--safe)}.t-danger{background:var(--danger)}.t-irr{background:var(--irr)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;margin-top:12px}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.donut{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.donut svg{width:160px;height:160px;flex:none}.donut text{fill:var(--tx);font-family:var(--fh)}
+.br{display:grid;grid-template-columns:minmax(90px,1.2fr) 3fr 46px;gap:10px;align-items:center;margin-bottom:10px;font-size:.82rem}
+.br .tr{position:relative;height:12px;background:var(--soft);border-radius:9px}.br .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:9px}.br .tr u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--tx);opacity:.3}.br b{text-align:right}
+.tl{position:relative;height:12px;background:var(--soft);border-radius:9px;margin:26px 0 30px}.tl i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:var(--brand)}
+.tl u{position:absolute;top:-8px;width:3px;height:28px;background:#f59e0b;border-radius:3px;text-decoration:none}.tl em{position:absolute;top:30px;font-style:normal;font-size:.7rem;color:var(--mut);transform:translateX(-50%);white-space:nowrap}
+.call{border-radius:12px;padding:14px 16px;background:var(--soft);display:flex;gap:14px;align-items:center;margin-top:16px}
+.alert{border-radius:14px;padding:16px 20px;background:var(--irr);color:#fff;margin-bottom:18px;animation:pl 1.3s infinite}.alert b{font-size:1.05rem}.alert p{margin:4px 0 0;font-size:.9rem}@keyframes pl{50%{box-shadow:0 0 0 7px rgba(220,38,38,.28)}}
+.seg,.chip{border:1px solid var(--bd);background:var(--soft);color:var(--tx);border-radius:99px;padding:8px 16px;font:700 .84rem var(--fb);cursor:pointer}
+.seg.on,.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}.row{display:flex;gap:8px;flex-wrap:wrap}.mt{margin-top:14px}
+label{display:block;font-size:.76rem;color:var(--mut);margin:0 0 6px;font-weight:700}
+input[type=date],textarea{font:inherit;width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--soft);color:var(--tx)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}details summary{cursor:pointer;color:var(--brand);font-weight:700;font-size:.84rem}
+.chk{display:flex;gap:10px;align-items:center;margin:12px 0;font-size:.86rem}.chk input{width:18px;height:18px;accent-color:var(--brand)}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.modes .seg{border-radius:12px;padding:11px 8px}
+.sj{padding:14px 0;border-top:1px solid var(--bd)}.sj:first-child{border-top:0;padding-top:0}
+.sjh{display:flex;gap:10px;align-items:center}.sjh .nm{flex:1;font-weight:700;font-size:.9rem;line-height:1.25}.face{font-size:1.5rem}
+.cnt{display:flex;align-items:center;gap:6px}.cnt button{width:34px;height:34px;border-radius:10px;border:1px solid var(--bd);background:var(--soft);color:var(--tx);font-size:1.15rem;cursor:pointer}
+.cnt input{width:62px;text-align:center;font:800 1.1rem var(--fh);padding:6px 2px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx)}.cnt span{font-weight:800;color:var(--mut)}
+.bat{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin-top:10px}.bat i{height:26px;border-radius:5px;background:var(--soft);border:1px solid var(--bd);cursor:pointer;transition:.12s}.bat i.f{background:var(--c);border-color:var(--c)}.bat i:active{transform:scaleY(.85)}
+.batl{position:relative;height:14px;font-size:.65rem;color:var(--mut)}.batl span{position:absolute;transform:translateX(-50%)}
+.rg{width:58px;height:58px;flex:none}.rg circle{fill:none;stroke-width:7;transform-origin:32px 32px;transform:rotate(-90deg)}.rg .rb{stroke:var(--bd)}.rg .rf{stroke-linecap:round}.rg text{font:800 15px var(--fh);fill:var(--tx)}
+.calh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.calh b{font-size:.98rem}.calh button{width:34px;height:34px;border-radius:10px;border:1px solid var(--bd);background:var(--soft);color:var(--tx);cursor:pointer;font-size:1rem}.calh button:disabled{opacity:.35}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.cal>span{text-align:center;font-size:.68rem;color:var(--mut);font-weight:700}
+.cd{aspect-ratio:1;min-height:38px;border-radius:10px;border:1.5px solid var(--bd);background:var(--soft);font:700 .86rem var(--fb);color:var(--tx);position:relative;cursor:pointer}
+.cd small{position:absolute;right:4px;bottom:2px;font-size:.55rem;color:var(--mut)}
+.cd.p{background:rgba(22,163,74,.14);border-color:rgba(22,163,74,.5)}.cd.a{background:rgba(220,38,38,.15);border-color:rgba(220,38,38,.55)}.cd.h{background:rgba(217,119,6,.18);border-color:rgba(217,119,6,.55)}
+.cd.off{background:transparent;border-color:transparent;color:var(--mut);opacity:.45;cursor:default}.cd.fut{opacity:.4;cursor:default}.cd.sel{outline:3px solid var(--brand);outline-offset:1px}
+.pc{border:1.5px solid var(--bd);background:var(--soft);border-radius:10px;padding:8px 12px;font:600 .82rem var(--fb);color:var(--tx);cursor:pointer;display:flex;gap:8px;align-items:center}.pc i{width:9px;height:9px;border-radius:50%}
+.pc.x{background:rgba(220,38,38,.14);border-color:var(--irr);text-decoration:line-through;color:var(--irr)}.dp{background:var(--soft);border-radius:12px;padding:14px;margin-top:14px}
+.act{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:8px 12px;font:700 .8rem var(--fb);cursor:pointer}.act.red{color:var(--irr);border-color:var(--irr)}.act.grn{color:var(--star);border-color:var(--star)}
+.sumr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--bd);font-size:.86rem;gap:10px}
+.plan{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.goals{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.gl{border-radius:12px;padding:12px}.gl span{font-size:.74rem;font-weight:700;display:block}.gl b{display:block;font-size:1.4rem;margin:2px 0}.gl em{font-style:normal;font-size:.7rem;opacity:.85}
+.g75{background:rgba(22,163,74,.12);color:var(--star)}.g90{background:rgba(37,99,235,.12);color:var(--brand)}.gno{background:rgba(220,38,38,.12);color:var(--irr)}
+.sjt{display:flex;gap:14px;align-items:center}.sjt .nm{flex:1}
+.tc{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--bd);font-size:.88rem}.tc:first-of-type{border-top:0}.tc .pd{font:800 .72rem var(--fh);color:var(--mut);width:26px}.tc i{width:10px;height:10px;border-radius:50%;flex:none}.tc .tn{flex:1;font-weight:600}
+.wkr{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.wd{background:var(--soft);border-radius:12px;padding:10px 4px;text-align:center}.wd small{display:block;color:var(--mut);font-size:.68rem;font-weight:700}.wd b{font-size:1.1rem}.wd span{display:block;font-size:.62rem;color:var(--mut)}.wd.now{outline:2px solid var(--brand)}
+.wi{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 12px}.wi button{width:42px;height:42px;border-radius:12px;border:1px solid var(--bd);background:var(--soft);color:var(--tx);font-size:1.3rem;cursor:pointer}.wi .wn{text-align:center;min-width:90px}.wi .wn b{font-size:2.2rem;display:block;line-height:1}.wi .wn span{font-size:.72rem;color:var(--mut)}
+.res{text-align:center;background:var(--soft);border-radius:12px;padding:14px;margin-top:12px}.res b{font-size:1.6rem}
+.lc{width:100%;height:auto}.lc text{fill:var(--mut);font:600 10px var(--fb)}.lc .gr{stroke:var(--bd)}
+.tbl{width:100%;border-collapse:collapse;font-size:.83rem}.tbl th{text-align:left;color:var(--mut);font-size:.72rem;padding:8px 10px;border-bottom:2px solid var(--bd)}.tbl td{padding:10px;border-bottom:1px solid var(--bd)}.sc{overflow-x:auto}
+.cols{display:flex;gap:10px;align-items:flex-end;height:150px}.cols div{flex:1;text-align:center;font-size:.72rem;color:var(--mut);display:flex;flex-direction:column;justify-content:flex-end;height:100%}.cols i{display:block;border-radius:8px 8px 3px 3px;background:var(--brand);margin-bottom:6px}.cols b{color:var(--tx);font-size:.85rem}
+.tt th,.tt td{text-align:center;padding:6px 4px;border:1px solid var(--bd);font-size:.74rem}.tt th{background:var(--soft);color:var(--mut)}.tt td b{display:block;border-radius:6px;padding:5px 2px;color:#fff;font-size:.7rem}.tt tr.now td:first-child{background:#f59e0b;color:#222;font-weight:800}
+.gd{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}.gd .card{display:flex;gap:14px}.gd h3{margin:0 0 3px}.gd p{margin:0;color:var(--mut);font-size:.86rem}
+.bnav{display:none}.note{color:var(--mut);font-size:.76rem;margin-top:18px}
+@media(max-width:1000px){.g4{grid-template-columns:1fr 1fr}.g2,.g21{grid-template-columns:1fr}}
+@media(max-width:900px){.shell{display:block}.side{display:none}.pg{padding:18px 16px 110px}.top{padding:12px 16px}
+.bnav{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:6px;box-shadow:0 6px 24px rgba(0,0,0,.18);z-index:9}
+.bnav button{flex-direction:column;gap:2px;padding:8px 2px;font-size:.66rem;justify-content:center;align-items:center;color:var(--mut);margin:0;text-align:center}.bnav button i{font-style:normal;font-size:1.25rem}.bnav button.on{background:var(--brand);color:#fff}
+.bnav .bdg{position:absolute;top:2px;right:16%;margin:0}.hero h1{font-size:1.3rem}.br{grid-template-columns:90px 1fr 42px}}
+</style></head><body>
+<div class="shell">
+<aside class="side"><div class="brand"><div class="logo">SRM</div><div><b>SRM Institute of Science &amp; Technology</b><span>Tiruchirappalli · Faculty of E&amp;T</span></div></div>
+<nav id="snav"></nav><div class="foot"><b>Odd Semester 2026-27</b>29 Aug → 29 Nov 2026<br>Minimum attendance: 75%</div></aside>
+<div class="main"><header class="top"><div class="crumb"><small>Attendance Portal</small><b id="pgt">Overview</b></div><button class="ctx" id="ctx"></button></header>
+
+<section class="pg on" id="p-overview">
+<div class="hero"><small>Attendance at a glance</small><h1 id="hh">Your semester, in one look</h1><p>Where you stand in every subject, what needs attention, and what's coming up.</p></div>
+<div id="ov-alert"></div>
+<div class="grid g4" id="kpis"></div>
+<div class="grid g4 mt" id="mini"></div>
+<h2 class="sec">Today &amp; this week</h2>
+<div class="grid g2"><div class="card"><h3>Today's classes</h3><p class="hint" id="tdate"></p><div id="today-list"></div></div><div class="card"><h3>Next 7 days</h3><p class="hint">How many classes you have each day.</p><div class="wkr" id="week"></div></div></div>
+<h2 class="sec">Status &amp; subjects</h2>
+<div class="grid g21"><div class="card"><h3>Subject-wise attendance</h3><p class="hint">Bars show your % now. Thin lines mark 75% (detention line) and 90% (star goal).</p><div id="bars"></div></div>
+<div class="card"><h3>Subjects by zone</h3><p class="hint">Share of subjects in each zone.</p><div class="donut" id="pie"></div></div></div>
+<h2 class="sec">Semester timeline</h2><div class="card"><div id="tl"></div><div id="focus"></div></div>
+</section>
+
+<section class="pg" id="p-calc">
+<div class="hero"><small>Step by step</small><h1>Calculate your plan</h1><p>Choose your class, set your dates, then tell us your attendance — either quickly or by marking the days you missed.</p></div>
+<div class="grid g2">
+<div><div class="card"><h3>① Your class</h3><p class="hint">Pick your year, then your section.</p><div class="row" id="yrs"></div><div class="row mt" id="secs"></div></div>
+<div class="card mt"><h3>② Your dates</h3><p class="hint"><b style="font-family:var(--fb)">Today</b> is where counting starts. <b style="font-family:var(--fb)">Plan up to</b> is a future day you want a forecast for.</p>
+<div class="two"><div><label>Today</label><input type="date" id="today"></div><div><label>Plan up to</label><input type="date" id="plan"></div></div>
+<div class="row mt"><button class="chip" data-add="7">+1 week</button><button class="chip" data-add="14">+2 weeks</button><button class="chip" data-add="30">+1 month</button><button class="chip" data-add="999">Sem end</button></div>
+<details class="mt"><summary>Holidays &amp; extras</summary><label class="chk"><input type="checkbox" id="inc" checked> Today's classes are not counted in my portal yet</label><label>Holidays — YYYY-MM-DD, comma separated</label><textarea id="hol" rows="2"></textarea></details></div></div>
+<div class="card"><h3>③ Your attendance so far</h3><p class="hint">Choose how you want to tell us.</p>
+<div class="modes" id="modeseg"><button class="seg" data-mode="pct">⚡ Quick entry<br><small>I know my %</small></button><button class="seg" data-mode="days">📅 Mark my days<br><small>Tap days I missed</small></button></div>
+<div id="inputs"></div>
+<div id="daymode" hidden><p class="hint">Every day is counted as <b style="font-family:var(--fb)">attended</b> unless you mark it. Tap a day, then mark the whole day or single periods you missed.</p>
+<div id="cal"></div><div class="legend"><span><i style="background:var(--star)"></i>Attended all</span><span><i style="background:var(--danger)"></i>Missed some</span><span><i style="background:var(--irr)"></i>Missed all</span></div><div id="daypanel"></div><div id="daysum" class="mt"></div></div></div></div>
+<h2 class="sec">Your game plan</h2><div class="plan" id="plancards"></div>
+</section>
+
+<section class="pg" id="p-insights">
+<div class="hero"><small>Deeper analysis</small><h1>Insights &amp; forecasts</h1><p>Understand how each subject will move, how much room you have to skip, and try "what if" plans.</p></div>
+<div class="row" id="subjchips"></div>
+<h2 class="sec">Path to semester end</h2><div class="grid g21"><div class="card"><h3 id="pt">Weekly forecast</h3><p class="hint">Three possible futures. Green dashed = 90%, red dashed = 75% detention line.</p><div id="path"></div></div>
+<div class="card"><h3>Your remaining classes</h3><p class="hint">Must-attend vs can-skip.</p><div class="donut" id="rem"></div></div></div>
+<h2 class="sec">Try it out</h2><div class="grid g2"><div class="card"><h3>What-if simulator</h3><p class="hint">How many of the remaining classes might you skip?</p><div id="wi"></div></div><div class="card"><h3>Target planner</h3><p class="hint">Pick a goal and see what each subject needs.</p><div class="row" id="tgc"></div><div class="sc mt" id="tgt"></div></div></div>
+<h2 class="sec">Forecast for your plan date</h2><div class="card sc"><div id="fc"></div></div>
+<h2 class="sec">Weekly class load</h2><div class="card"><p class="hint">Class periods on each weekday for your section.</p><div class="cols" id="load"></div></div>
+</section>
+
+<section class="pg" id="p-time">
+<div class="hero"><small>Your week</small><h1>Timetable</h1><p>Colours match the subjects everywhere in the portal. Today is highlighted.</p></div>
+<div class="card sc"><div id="tt"></div><div class="legend" id="ttl"></div></div>
+</section>
+
+<section class="pg" id="p-guide">
+<div class="hero"><small>Help</small><h1>Key terms, explained</h1><p>Short and simple definitions of what you see here.</p></div>
+<div class="gd">
+<div class="card"><div class="ic">🛑</div><div><h3>Detention line · 75%</h3><p>The minimum attendance. Below it in a subject, you are in the detention zone.</p></div></div>
+<div class="card"><div class="ic">🛡️</div><div><h3>Stay-safe goal</h3><p>How many of the classes still left you must attend to end the semester at 75% or more.</p></div></div>
+<div class="card"><div class="ic">⭐</div><div><h3>Star goal · 90%</h3><p>The same idea for 90%. A cushion, not a requirement.</p></div></div>
+<div class="card"><div class="ic">🚨</div><div><h3>Irreversible detention</h3><p>The point of no return: even attending every class left, you can't reach 75% by 29 Nov.</p></div></div>
+<div class="card"><div class="ic">✂️</div><div><h3>Skip budget</h3><p>How many upcoming classes you can miss and still finish at 75%.</p></div></div>
+<div class="card"><div class="ic">🧮</div><div><h3>How we calculate</h3><p>Classes come from your timetable (Mon–Fri, minus holidays). Then we solve how many of the remaining you need.</p></div></div>
+</div>
+<h2 class="sec">FAQ</h2><div class="card"><details><summary>Quick entry or Mark my days?</summary><p class="hint">Quick entry: type your % from the portal. Mark my days: we assume you attended everything and you only mark the days or periods you missed — all subjects update together.</p></details>
+<details class="mt"><summary>Why is my number slightly different from the portal?</summary><p class="hint">Quick entry estimates attended classes from a rounded %. The portal is always the official record.</p></details>
+<details class="mt"><summary>What if there is a holiday or cancelled class?</summary><p class="hint">Add the date under "Holidays &amp; extras" in the Calculator and every number updates.</p></details>
+<details class="mt"><summary>Is my data stored anywhere?</summary><p class="hint">No. Everything stays in your browser on this device.</p></details></div>
+</section>
+</div></div>
+<nav class="bnav" id="bnav"></nav>
+<script>
+/* Timetables. Tokens per day = periods in order ('-' = free). 'X/Y' = X for first branch, Y for second. */
+const b3={A:"Discrete Mathematics",B:"Microprocessor & Microcontroller (MPMC)",C:"VLSI Design & Technology",D:"System & Network on Chip",E:"Machine Learning for All",F:"Community Connect",G:"Analytical & Logical Thinking (CDC)",H:"Indian Art Form",L:"VLSI/Microprocessor Lab",BP:"MPMC – Project hour"};
+const iv={A:"Behavioural Psychology",B:"Wireless Comm & Antenna Systems",C:"Computer Comm & Network Security",D:"Semiconductor Memory Design",E:"Scripting Language for EDA",F:"Machine Learning for All",L:"CCNS Lab"};
+const ds2={A:"Transforms & Boundary Value Problems",B:"Solid State Devices",C:"Computer Organization & Architecture",D:"Digital Logic Design",E:"Electromagnetic Theory & Interference",F:"Professional Ethics",G:"Universal Human Values-II",H:"Verbal Reasoning (CDC)",I:"Social Engineering",L:"Devices & Digital IC Lab"};
+const fy={E:"Philosophy of Engineering",A:"Advanced Calculus & Complex Analysis",B:"Chemistry",D:"Programming for Problem Solving",CL:"Chemistry Lab",W:"Basic Civil & Mechanical Workshop",PL:"PPS Lab",PC:"PCB / EC Lab",N:"NSS",GE:"German",CD:"General Aptitude (CDC)",Y:"Yoga",J:"Japanese"};
+const br=(d,i)=>d.map(r=>r.split(" ").map(t=>t.includes("/")?(t.split("/")[i]||"-"):t).join(" "));
+const eceB=["CD F/G CL CL - E E B A","W W W W - C B A D","F/G PL CD CD PL - B E D","N N C A - D GE GE GE","PC PC - GE GE - - B A"];
+const bio=["C/- Y Y F/G - E E A B","CD CD C/- F/- - - B A D","W W W W - D B E D","CL CL A C/G - B J J J","F/- CD A J J - - PL PL"];
+const SEC={
+"I ECE-A":{g:"I Year",s:{...fy,C:"Electronic System & PCB Design",F:"Biology"},d:["E E B A - CL CL F CD","C B A D - W W W W","B E D - - PL PL PC PC","GE GE GE A - CD CD N N","D A C B - F GE GE GE"]},
+"I ECE-B":{g:"I Year",s:{...fy,F:"Electronic System & PCB Design",C:"Biology"},d:br(eceB,0)},
+"I EEE":{g:"I Year",s:{...fy,G:"Electrical Circuits",C:"Biology"},d:br(eceB,1)},
+"I ECE-DS":{g:"I Year",s:{...fy,C:"Electronic System & PCB Design",F:"Biology"},d:["F CD PC PC - E E B A","CL CL N N - C B A D","CD CD A - PL PL B E D","F A D GE GE - - C B","GE GE GE PL - W W W W"]},
+"I Biotech-B":{g:"I Year",s:{...fy,C:"Cell Biology",F:"Biochemistry"},d:br(bio,0)},
+"I Biomedical Engg":{g:"I Year",s:{...fy,G:"Human Physiology & Anatomy"},d:br(bio,1)},
+"II ECE-DS A":{g:"II Year",s:ds2,d:["E A I I G G L L","C A E D G - H H","A B C D - H - -","B C A F L L - -","D B E C - - - -"]},
+"II ECE-DS B":{g:"II Year",s:ds2,d:["- - L L D B C I","L L - - C D E A","G - - - I E A D","G G H H A C B E","H - - - F A B C"]},
+"II BME":{g:"II Year",s:{A:"Transforms & Boundary Value Problems",B:"Biomedical Signals & Systems",C:"Electric & Electronic Circuits",D:"Digital Logic for Medical Systems",E:"Medical Physics",F:"Professional Ethics",G:"Universal Human Values-II",H:"Verbal Reasoning (CDC)",I:"Social Engineering",L:"DLMS/EEC Lab"},d:["E C I I L L - -","C E B A H H - -","B D A - H G - -","A E B D - - L L","F A C D - - G G"]},
+"III ECE-A":{g:"III Year",s:b3,d:["E B B A G G - -","H D B BP - G - -","C A D F - - L L","A E C F - - - -","D A E C L L - -"]},
+"III ECE-B":{g:"III Year",s:b3,d:["L L - - E B A D","G G - - F B D C","G - - - BP B A H","L L - - A C E F","- - - - C A E D"]},
+"III ECE-DS":{g:"III Year",s:{...b3,D:"Machine Learning for All",E:"Database Design & Management"},d:["E B C A - - - -","C B D F L L - -","H B A C - - G G","A D E F - - - -","D A E BP G - L L"]},
+"III BME":{g:"III Year",s:{A:"Probability & Statistics",B:"Microcontrollers & Applications in Medicine",C:"Biomedical Signal Processing",D:"Biometrics",E:"Modern Wireless Communication",F:"Principles of Medical Imaging",G:"Analytical & Logical Thinking (CDC)",H:"Indian Art Form",I:"Community Connect",M:"MPMC Lab",Q:"Bio DSP Lab"},d:["G G M M E B F H","Q Q G - C D A B","- - - - C A F D","- - - I A C E B","I - - - F A D E"]},
+"IV ECE-A":{g:"IV Year",s:iv,d:["C - A D - - - -","C D B F - - - -","B L E F - - - -","F A E B - - - -","C A D E - - - -"]},
+"IV ECE-B":{g:"IV Year",s:iv,d:["C A E F - - - -","C E F B - - - -","C D A B - - - -","D B L A - - - -","E D F - - - - -"]}
+};
+const START=new Date(2026,7,29),END=new Date(2026,10,29),$=id=>document.getElementById(id);
+const key=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const parse=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const clamp=d=>d<START?START:d>END?END:d;
+const fmt=d=>d.getDate()+"/"+(d.getMonth()+1);
+const ZN={star:["Star zone","var(--star)"],safe:["Safe zone","var(--safe)"],danger:["Danger zone","var(--danger)"],irr:["Irreversible","var(--irr)"]};
+const COL=["#2563eb","#7c3aed","#0891b2","#16a34a","#d97706","#db2777","#4b5563","#65a30d","#ea580c","#0d9488","#4f46e5"];
+const PG=[["overview","🏠","Overview"],["calc","🧮","Calculator"],["insights","📈","Insights"],["time","🗓️","Timetable"],["guide","💡","Guide"]];
+const YRS=[...new Set(Object.values(SEC).map(v=>v.g))];
+const DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+let sec=Object.keys(SEC)[0],yr=SEC[sec].g,keys=[],vals={},absDays={},mode="pct",page="overview",sub=null,wi=0,tg=75,selDay=null,calM=null;
+const save=()=>{try{localStorage.setItem("ap7",JSON.stringify({sec,vals,mode,absDays}))}catch(e){}};
+try{const o=JSON.parse(localStorage.getItem("ap7")||"null");if(o&&SEC[o.sec]){sec=o.sec;vals=o.vals||{};mode=o.mode||"pct";absDays=o.absDays||{};yr=SEC[sec].g}}catch(e){}
+const getV=k=>vals[sec+"|"+k]??80;
+const periodsOf=S=>S.g==="I Year"?[1,2,3,4,5,6,7,8,9]:[1,2,3,4,6,7,8,9];
+const ab=n=>n.replace(/\(.*?\)/g,"").split(/[\s&\/-]+/).filter(w=>w.length>2&&!/^(and|for|the|its)$/i.test(w)).map(w=>w[0].toUpperCase()).join("").slice(0,3);
+const colOf=k=>COL[Math.max(0,keys.indexOf(k))%COL.length];
+const hols=()=>new Set($("hol").value.split(/[\s,]+/).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x)));
+function dayTokens(d,H){const w=d.getDay();if(w<1||w>5||d<START||d>END||(H||hols()).has(key(d)))return [];return (SEC[sec].d[w-1]||"").split(" ")}
+function count(from,to){const r={},H=hols();for(let d=new Date(from);d<=to;d=addD(d,1))dayTokens(d,H).forEach(t=>{if(t!=="-")r[t]=(r[t]||0)+1});return r}
+function ctxDates(){const today=parse($("today").value);let plan=parse($("plan").value);if(plan<today)plan=today;return{today,plan,first:$("inc").checked?today:addD(today,1)}}
+function missed(last){const H=hols(),m={},A=absDays[sec]||{};for(const k in A){const d=parse(k);if(d>last)continue;const t=dayTokens(d,H);[...new Set(A[k])].forEach(i=>{if(t[i]&&t[i]!=="-")m[t[i]]=(m[t[i]]||0)+1})}return m}
+function calc(){const S=SEC[sec],{today,plan,first}=ctxDates(),last=addD(first,-1);
+ const held=first>START?count(START,last):{},rem=first>END?{}:count(clamp(first),END),win=first>END||plan<first?{}:count(clamp(first),plan>END?END:plan),M=mode==="days"?missed(last):null;
+ return keys.map(k=>{const h=held[k]||0,r=rem[k]||0,w=win[k]||0,tot=h+r;let pct,a;
+  if(M){a=Math.max(0,h-(M[k]||0));pct=h?Math.round(a/h*1000)/10:100}else{pct=getV(k);a=Math.round(pct*h/100)}
+  const need=t=>Math.max(0,Math.ceil(t*tot-1e-9)-a),n75=need(.75),n90=need(.9),irr=n75>r;
+  const x={k,name:S.s[k],pct,h,r,w,a,tot,n75,n90,irr,need,maxEnd:tot?(a+r)/tot*100:0,nPlan:Math.max(0,Math.ceil(.75*(h+w)-1e-9)-a)};
+  x.z=irr?"irr":pct<75?"danger":pct<90?"safe":"star";return x}).filter(x=>x.tot>0)}
+/* ---------- charts (pure SVG) ---------- */
+function donut(seg,center,small){const T=seg.reduce((s,x)=>s+x.v,0)||1;let off=25;
+ const arcs=seg.filter(x=>x.v>0).map(x=>{const p=x.v/T*100,e=`<circle cx="21" cy="21" r="15.9155" fill="none" stroke="${x.c}" stroke-width="5.5" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${off}"/>`;off-=p;return e}).join("");
+ return `<svg viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--soft)" stroke-width="5.5"/>${arcs}<text x="21" y="22.5" text-anchor="middle" font-size="7.5" font-weight="800">${center}</text><text x="21" y="28" text-anchor="middle" font-size="2.7" style="fill:var(--mut)">${small||""}</text></svg>`}
+const legend=seg=>`<div class="legend" style="flex-direction:column">${seg.map(x=>`<span><i style="background:${x.c}"></i>${x.l} <b>${x.v}</b></span>`).join("")}</div>`;
+function ring(p,c){return `<svg class="rg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" class="rb"/><circle cx="32" cy="32" r="26" class="rf" style="stroke:${c};stroke-dasharray:${p*1.634} 163.4"/><text x="32" y="37.5" text-anchor="middle">${Math.round(p)}%</text></svg>`}
+function line(labels,series){const W=640,H=270,L=38,R=16,T=14,B=30,n=labels.length;
+ const all=series.flatMap(s=>s.v).concat([75,90]),ymin=Math.max(0,Math.floor((Math.min(...all)-5)/10)*10),X=i=>L+(W-L-R)*i/Math.max(1,n-1),Y=v=>T+(H-T-B)*(1-(v-ymin)/(100-ymin));
+ let g="";for(let v=ymin;v<=100;v+=10)g+=`<line class="gr" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L-6}" y="${Y(v)+3}" text-anchor="end">${v}%</text>`;
+ const st=Math.ceil(n/7);labels.forEach((l,i)=>{if(i%st===0||i===n-1)g+=`<text x="${X(i)}" y="${H-10}" text-anchor="middle">${l}</text>`});
+ g+=`<line x1="${L}" x2="${W-R}" y1="${Y(75)}" y2="${Y(75)}" stroke="var(--irr)" stroke-dasharray="5 4"/><line x1="${L}" x2="${W-R}" y1="${Y(90)}" y2="${Y(90)}" stroke="var(--star)" stroke-dasharray="5 4"/>`;
+ series.forEach(s=>{g+=`<polyline fill="none" stroke="${s.c}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="${s.v.map((v,i)=>X(i)+","+Y(v)).join(" ")}"/><circle cx="${X(n-1)}" cy="${Y(s.v[n-1])}" r="4.5" fill="${s.c}"/>`});
+ return `<svg class="lc" viewBox="0 0 ${W} ${H}">${g}</svg><div class="legend">${series.map(x=>`<span><i style="background:${x.c}"></i>${x.n}: <b>${x.v[x.v.length-1].toFixed(1)}%</b> at end</span>`).join("")}</div>`}
+/* ---------- shell ---------- */
+function nav(){const h=PG.map(p=>`<button data-p="${p[0]}" class="${p[0]===page?"on":""}"><i>${p[1]}</i>${p[2]}${p[0]==="overview"?'<b class="bdg" hidden></b>':""}</button>`).join("");$("snav").innerHTML=h;$("bnav").innerHTML=h;
+ document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{location.hash=b.dataset.p})}
+function show(){const h=location.hash.slice(1);page=PG.some(p=>p[0]===h)?h:"overview";
+ document.querySelectorAll(".pg").forEach(s=>s.classList.toggle("on",s.id==="p-"+page));nav();$("pgt").textContent=PG.find(p=>p[0]===page)[2];scrollTo(0,0);render()}
+window.onhashchange=show;$("ctx").onclick=()=>location.hash="calc";
+function render(){const L=calc(),bad=L.filter(x=>x.z==="danger"||x.z==="irr").length;
+ $("ctx").textContent=`🎓 ${sec} · ${fmt(ctxDates().today)}`;document.querySelectorAll(".bdg").forEach(b=>{b.hidden=!bad;b.textContent=bad});
+ if(page==="overview")overview(L);if(page==="calc"){plancards(L);dayUI(L)}if(page==="insights")insights(L);if(page==="time")timetable()}
+/* ---------- Overview ---------- */
+function overview(L){const {today,plan}=ctxDates(),H=hols(),ss=L.reduce((s,x)=>s+x.a,0),sh=L.reduce((s,x)=>s+x.h,0),ov=sh?ss/sh*100:(L.reduce((s,x)=>s+x.pct,0)/(L.length||1));
+ const oz=ov<75?"danger":ov<90?"safe":"star",cnt=z=>L.filter(x=>x.z===z).length,left=L.reduce((s,x)=>s+x.r,0),bad=cnt("danger")+cnt("irr");
+ const total=Math.round((END-START)/864e5),el=Math.min(total,Math.max(0,Math.round((today-START)/864e5)));
+ $("hh").textContent=`${sec} · ${today.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"})}`;
+ const irr=L.filter(x=>x.z==="irr");
+ $("ov-alert").innerHTML=irr.length?`<div class="alert"><b>🚨 IRREVERSIBLE DETENTION</b><p>${irr.map(x=>x.name).join(", ")} — even attending every remaining class won't reach 75% before 29 Nov. Please speak to your faculty or HOD today.</p></div>`:"";
+ $("kpis").innerHTML=`<div class="card kpi">${ring(ov,ZN[oz][1])}<div><div class="num">${ov.toFixed(1)}%</div><span>Overall attendance</span></div></div>
+ <div class="card kpi"><div class="ic">⚠️</div><div><div class="num">${bad}</div><span>Subjects need attention</span></div></div>
+ <div class="card kpi"><div class="ic">📚</div><div><div class="num">${left}</div><span>Classes left in semester</span></div></div>
+ <div class="card kpi"><div class="ic">⏳</div><div><div class="num">${Math.max(0,Math.ceil((END-today)/864e5))}</div><span>Days to semester end</span></div></div>`;
+ const miss=L.reduce((s,x)=>s+(x.h-x.a),0),skipB=L.filter(x=>!x.irr).reduce((s,x)=>s+(x.r-x.n75),0),by=[...L].sort((a,b)=>b.pct-a.pct),best=by[0],low=by[by.length-1];
+ $("mini").innerHTML=L.length?`<div class="card w"><small>Classes missed so far</small><div class="num">${miss}</div><span class="hint">of ${sh} held</span></div>
+ <div class="card w"><small>Total skip budget</small><div class="num">${skipB}</div><span class="hint">classes you can miss and stay ≥75%</span></div>
+ <div class="card w"><small>Strongest subject</small><b>${best.name}</b><span class="tag t-${best.z}">${best.pct}%</span></div>
+ <div class="card w"><small>Needs most help</small><b>${low.name}</b><span class="tag t-${low.z}">${low.pct}%</span></div>`:"";
+ const S=SEC[sec],tk=dayTokens(today,H),P=periodsOf(S);$("tdate").textContent=today.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"});
+ const it=tk.map((t,i)=>{if(t==="-"||!S.s[t])return "";const z=(L.find(x=>x.k===t)||{}).z||"safe";return `<div class="tc"><span class="pd">P${P[i]}</span><i style="background:${colOf(t)}"></i><span class="tn">${S.s[t]}</span><span class="tag t-${z}">${ZN[z][0].split(" ")[0]}</span></div>`}).join("");
+ $("today-list").innerHTML=it||`<p class="hint">No classes today 🎉 (weekend or holiday)</p>`;
+ let wk="";for(let i=0;i<7;i++){const d=addD(today,i);if(d>END)break;const n=dayTokens(d,H).filter(t=>t!=="-").length,w=d.getDay();wk+=`<div class="wd ${i?"":"now"}"><small>${DN[w]}</small><b>${d.getDate()}</b><span>${n?n+" cls":w%6===0?"Off":"Holiday"}</span></div>`}
+ $("week").innerHTML=wk;
+ const seg=["star","safe","danger","irr"].map(z=>({v:cnt(z),c:ZN[z][1],l:ZN[z][0]}));
+ $("pie").innerHTML=donut(seg,L.length,"subjects")+legend(seg);
+ $("bars").innerHTML=[...L].sort((a,b)=>a.pct-b.pct).map(x=>`<div class="br"><span>${x.name}</span><div class="tr"><i style="width:${x.pct}%;background:${ZN[x.z][1]}"></i><u style="left:75%"></u><u style="left:90%"></u></div><b>${x.pct}%</b></div>`).join("");
+ const pp=d=>Math.min(100,Math.max(0,(d-START)/(END-START)*100));
+ $("tl").innerHTML=`<div class="hint" style="margin:0">Day ${el} of ${total} · ${(el/total*100).toFixed(0)}% of the semester is over</div><div class="tl"><i style="width:${pp(today)}%"></i><u style="left:${pp(today)}%"></u><em style="left:${pp(today)}%">Today</em>${plan>today?`<u style="left:${pp(plan)}%;background:var(--brand)"></u><em style="left:${pp(plan)}%">Plan date</em>`:""}<em style="left:3%">29 Aug</em><em style="left:97%">29 Nov</em></div>`;
+ const w=[...L].filter(x=>x.z!=="star").sort((a,b)=>(b.n75/(b.r||1))-(a.n75/(a.r||1)))[0];
+ $("focus").innerHTML=w?`<div class="call"><div class="ic" style="background:var(--card)">🎯</div><div><b>Focus on ${w.name}</b><div class="hint" style="margin:2px 0 0">${w.irr?"It has passed the point of no return — talk to your faculty.":w.n75>0?`Attend at least ${w.n75} of the next ${w.r} classes to stay at 75%.`:`You're safe here — you can skip up to ${w.r-w.n75} of the next ${w.r} classes.`}</div></div></div>`:`<div class="call"><div class="ic" style="background:var(--card)">🎉</div><div><b>All subjects are in the star zone</b><div class="hint" style="margin:2px 0 0">Excellent — keep it up.</div></div></div>`}
+/* ---------- Calculator ---------- */
+function setup(){$("yrs").innerHTML=YRS.map(y=>`<button class="seg ${y===yr?"on":""}" data-y="${y}">Year ${y.split(" ")[0]}</button>`).join("");
+ $("secs").innerHTML=Object.keys(SEC).filter(n=>SEC[n].g===yr).map(n=>`<button class="chip ${n===sec?"on":""}" data-s="${n}">${n.replace(/^[IV]+ /,"")}</button>`).join("");
+ document.querySelectorAll("[data-y]").forEach(b=>b.onclick=()=>{yr=b.dataset.y;if(SEC[sec].g!==yr)pick(Object.keys(SEC).find(n=>SEC[n].g===yr));else setup()});
+ document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>pick(b.dataset.s))}
+function pick(n){sec=n;yr=SEC[n].g;sub=null;selDay=null;save();mk();setup();render()}
+const zc=p=>p<75?"var(--danger)":p<90?"var(--safe)":"var(--star)",face=p=>p>=90?"😎":p>=75?"🙂":p>=65?"😬":"😰";
+function mk(){const S=SEC[sec];keys=[...new Set(S.d.join(" ").split(" ").filter(t=>t!=="-"))].filter(k=>S.s[k]).sort();
+ $("inputs").innerHTML=keys.map(k=>{const v=getV(k);return `<div class="sj" id="sj-${k}"><div class="sjh"><span class="face">${face(v)}</span><div class="nm">${S.s[k]}</div><div class="cnt"><button data-m="${k}">−</button><input class="pn" type="number" min="0" max="100" value="${v}" data-n="${k}"><span>%</span><button data-p2="${k}">+</button></div></div>
+ <div class="bat" style="--c:${zc(v)}">${Array.from({length:20},(_,i)=>`<i data-b="${k}" data-i="${i}" class="${i<Math.round(v/5)?"f":""}"></i>`).join("")}</div><div class="batl"><span style="left:75%">75</span><span style="left:90%">90</span></div></div>`}).join("")}
+function upd(k,v,src){v=Math.min(100,Math.max(0,Math.round(v)));vals[sec+"|"+k]=v;const r=$("sj-"+k);if(r){r.querySelector(".face").textContent=face(v);const b=r.querySelector(".bat");b.style.setProperty("--c",zc(v));b.querySelectorAll("i").forEach((e,i)=>e.classList.toggle("f",i<Math.round(v/5)));if(src!=="n")r.querySelector(".pn").value=v}save();render()}
+$("inputs").onclick=e=>{const t=e.target.closest("[data-i],[data-m],[data-p2]");if(!t)return;
+ if(t.dataset.i!==undefined)upd(t.dataset.b,(+t.dataset.i+1)*5);else if(t.dataset.m)upd(t.dataset.m,getV(t.dataset.m)-1);else upd(t.dataset.p2,getV(t.dataset.p2)+1)};
+$("inputs").oninput=e=>{if(e.target.matches&&e.target.matches(".pn")&&e.target.value!=="")upd(e.target.dataset.n,+e.target.value,"n")};
+/* --- day-by-day calendar --- */
+function dayUI(L){document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("on",b.dataset.mode===mode));
+ $("inputs").hidden=mode!=="pct";$("daymode").hidden=mode!=="days";if(mode!=="days")return;
+ const {today,first}=ctxDates(),last=addD(first,-1),H=hols(),A=absDays[sec]||{};
+ if(!calM)calM=new Date(clamp(today).getFullYear(),clamp(today).getMonth(),1);
+ const m=calM,dim=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),lead=(m.getDay()+6)%7;
+ let g=["M","T","W","T","F","S","S"].map(x=>`<span>${x}</span>`).join("")+"<span></span>".repeat(lead);
+ for(let i=1;i<=dim;i++){const d=new Date(m.getFullYear(),m.getMonth(),i),k=key(d),tk=dayTokens(d,H),n=tk.filter(t=>t!=="-").length;let st="off";
+  if(n){if(d>last)st="fut";else{const a=(A[k]||[]).filter(j=>tk[j]&&tk[j]!=="-").length;st=a===0?"p":a===n?"a":"h"}}
+  g+=`<button class="cd ${st} ${selDay===k?"sel":""}" data-d="${k}" ${st==="off"||st==="fut"?"disabled":""}>${i}${n?`<small>${n}</small>`:""}</button>`}
+ $("cal").innerHTML=`<div class="calh"><button data-cm="-1" ${m<=new Date(START.getFullYear(),START.getMonth(),1)?"disabled":""}>‹</button><b>${m.toLocaleDateString(undefined,{month:"long",year:"numeric"})}</b><button data-cm="1" ${m>=new Date(END.getFullYear(),END.getMonth(),1)?"disabled":""}>›</button></div><div class="cal">${g}</div>`;
+ const S=SEC[sec],P=periodsOf(S);
+ if(selDay){const d=parse(selDay),tk=dayTokens(d,H),ab_=A[selDay]||[];
+  $("daypanel").innerHTML=`<div class="dp"><b>${d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"})}</b><p class="hint" style="margin:2px 0 10px">Tap the periods you missed.</p><div class="row">${tk.map((t,i)=>t==="-"||!S.s[t]?"":`<button class="pc ${ab_.includes(i)?"x":""}" data-pi="${i}"><i style="background:${colOf(t)}"></i>P${P[i]} · ${ab(S.s[t])}</button>`).join("")}</div>
+  <div class="row mt"><button class="act red" data-all="1">Missed whole day</button><button class="act grn" data-all="0">Attended all day</button></div></div>`}else $("daypanel").innerHTML="";
+ const ms=L.reduce((s,x)=>s+(x.h-x.a),0),mh=L.reduce((s,x)=>s+x.h,0);
+ $("daysum").innerHTML=`<div class="row" style="justify-content:space-between;align-items:center"><b>Calculated from your days</b><button class="act" data-clear="1">Reset all</button></div><p class="hint" style="margin:2px 0 8px">Missed ${ms} of ${mh} classes so far.</p>`+L.map(x=>`<div class="sumr"><span>${x.name}</span><span><b style="font-family:var(--fb)">${x.a}/${x.h}</b> <span class="tag t-${x.z}">${x.pct}%</span></span></div>`).join("");
+ document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{selDay=b.dataset.d;render()});
+ document.querySelectorAll("[data-cm]").forEach(b=>b.onclick=()=>{calM=new Date(m.getFullYear(),m.getMonth()+ +b.dataset.cm,1);render()});
+ document.querySelectorAll("[data-pi]").forEach(b=>b.onclick=()=>{const l=(absDays[sec]=absDays[sec]||{})[selDay]||[],i=+b.dataset.pi;absDays[sec][selDay]=l.includes(i)?l.filter(j=>j!==i):[...l,i];save();render()});
+ document.querySelectorAll("[data-all]").forEach(b=>b.onclick=()=>{const tk=dayTokens(parse(selDay),H);(absDays[sec]=absDays[sec]||{})[selDay]=b.dataset.all==="1"?tk.map((t,i)=>t==="-"?-1:i).filter(i=>i>=0):[];save();render()});
+ document.querySelectorAll("[data-clear]").forEach(b=>b.onclick=()=>{absDays[sec]={};selDay=null;save();render()})}
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;save();render()});
+function plancards(L){const o={irr:0,danger:1,safe:2,star:3};$("plancards").innerHTML=[...L].sort((a,b)=>o[a.z]-o[b.z]).map(x=>{
+ const say=x.irr?`<b style="color:var(--irr)">Point of no return.</b> Even attending all ${x.r} remaining classes only reaches ${x.maxEnd.toFixed(1)}%.`:x.n75>0?`Attend at least <b>${x.n75} of the next ${x.r}</b> classes to leave the danger zone.`:`You're comfortable — skip up to <b>${x.r-x.n75} of the next ${x.r}</b> and stay at 75%.`;
+ return `<div class="card"><div class="sjt">${ring(x.pct,ZN[x.z][1])}<div class="nm"><h3 style="margin:0 0 4px">${x.name}</h3><span class="tag t-${x.z}">${ZN[x.z][0]}</span></div></div><p style="margin:14px 0 0;font-size:.9rem">${say}</p>
+ <div class="goals">${x.irr?`<div class="gl gno"><span>🛡️ Stay-safe goal</span><b>—</b><em>not possible now</em></div>`:`<div class="gl g75"><span>🛡️ Stay-safe goal</span><b>${x.n75} / ${x.r}</b><em>attend for 75%</em></div>`}
+ ${x.n90>x.r?`<div class="gl gno"><span>⭐ Star goal</span><b>—</b><em>90% out of reach</em></div>`:`<div class="gl g90"><span>⭐ Star goal</span><b>${x.n90} / ${x.r}</b><em>attend for 90%</em></div>`}</div></div>`}).join("")}
+/* ---------- Insights ---------- */
+function insights(L){if(!L.length)return;if(!sub||!L.some(x=>x.k===sub))sub=L[0].k;
+ $("subjchips").innerHTML=L.map(x=>`<button class="chip ${x.k===sub?"on":""}" data-sb="${x.k}">${x.name}</button>`).join("");
+ document.querySelectorAll("[data-sb]").forEach(b=>b.onclick=()=>{sub=b.dataset.sb;wi=0;render()});
+ const x=L.find(y=>y.k===sub),{first,plan}=ctxDates();$("pt").textContent=x.name+" — weekly forecast";
+ const labels=["Now"],all=[x.h?x.a/x.h*100:x.pct],skip=[all[0]],minp=[all[0]];let e=addD(first,6);
+ if(first<=END)while(true){const end=e>END?END:e,c=count(clamp(first),end)[x.k]||0,T=x.h+c||1;labels.push(fmt(end));all.push((x.a+c)/T*100);skip.push(x.a/T*100);minp.push((x.a+(x.r?x.n75*c/x.r:0))/T*100);if(end>=END)break;e=addD(e,7)}
+ const ser=[{n:"Attend every class",c:"#16a34a",v:all}];if(!x.irr&&x.n75>0)ser.push({n:"Attend only what's needed",c:"#2563eb",v:minp});ser.push({n:"Skip every class",c:"#dc2626",v:skip});
+ $("path").innerHTML=labels.length>1?line(labels,ser):`<p class="hint">No classes left in this semester.</p>`;
+ const seg=x.irr?[{v:x.r,c:"var(--irr)",l:"Not enough to recover"}]:[{v:x.n75,c:"var(--brand)",l:"Must attend"},{v:x.r-x.n75,c:"var(--star)",l:"Can skip"}];
+ $("rem").innerHTML=donut(seg,x.r,"classes left")+legend(seg);
+ wi=Math.min(wi,x.r);const fin=x.tot?(x.a+x.r-wi)/x.tot*100:0,fz=fin<75?"danger":fin<90?"safe":"star";
+ $("wi").innerHTML=`<div class="wi"><button data-wi="-1">−</button><div class="wn"><b>${wi}</b><span>classes I skip</span></div><button data-wi="1">+</button></div><div class="row" style="justify-content:center"><button class="chip" data-ws="0">None</button><button class="chip" data-ws="3">3</button><button class="chip" data-ws="5">5</button>${x.irr?"":`<button class="chip" data-ws="${x.r-x.n75}">Max safe (${x.r-x.n75})</button>`}</div><div class="res">You'd finish <b>${x.name}</b> at<br><b>${fin.toFixed(1)}%</b> <span class="tag t-${fz}">${ZN[fz][0]}</span></div>`;
+ document.querySelectorAll("[data-wi]").forEach(b=>b.onclick=()=>{wi=Math.max(0,Math.min(x.r,wi+ +b.dataset.wi));render()});
+ document.querySelectorAll("[data-ws]").forEach(b=>b.onclick=()=>{wi=Math.max(0,Math.min(x.r,+b.dataset.ws));render()});
+ $("tgc").innerHTML=[75,80,85,90,95].map(t=>`<button class="chip ${t===tg?"on":""}" data-tg="${t}">${t}%</button>`).join("");
+ $("tgt").innerHTML=`<table class="tbl"><tr><th>Subject</th><th>Attend</th><th>Skip budget</th></tr>${L.map(y=>{const n=y.need(tg/100);return `<tr><td>${y.name}</td><td>${n>y.r?'<span class="tag t-irr">Not reachable</span>':`<b style="font-family:var(--fb)">${n} of ${y.r}</b>`}</td><td>${n>y.r?"—":y.r-n}</td></tr>`}).join("")}</table>`;
+ document.querySelectorAll("[data-tg]").forEach(b=>b.onclick=()=>{tg=+b.dataset.tg;render()});
+ $("fc").innerHTML=`<table class="tbl"><tr><th>Subject</th><th>Now</th><th>Left</th><th>Must attend (75%)</th><th>Skip budget</th><th>By ${fmt(plan)}: attend all</th><th>skip all</th></tr>${L.map(y=>`<tr><td><b style="font-family:var(--fb)">${y.name}</b></td><td><span class="tag t-${y.z}">${y.pct}%</span></td><td>${y.r}</td><td>${y.irr?"—":y.n75}</td><td>${y.irr?"—":y.r-y.n75}</td><td>${((y.a+y.w)/(y.h+y.w)*100||0).toFixed(1)}%</td><td>${(y.a/(y.h+y.w)*100||0).toFixed(1)}%</td></tr>`).join("")}</table>`;
+ const ld=SEC[sec].d.map(r=>r.split(" ").filter(t=>t!=="-").length),mx=Math.max(...ld,1);
+ $("load").innerHTML=ld.map((n,i)=>`<div><i style="height:${n/mx*100}px"></i><b>${n}</b>${DN[i+1]}</div>`).join("")}
+/* ---------- Timetable ---------- */
+function timetable(){const S=SEC[sec],P=periodsOf(S),wd=ctxDates().today.getDay();
+ $("tt").innerHTML=`<table class="tbl tt"><tr><th>Day</th>${P.map(p=>`<th>P${p}</th>`).join("")}</tr>${S.d.map((r,i)=>`<tr class="${wd===i+1?"now":""}"><td>${DN[i+1]}</td>${r.split(" ").map(t=>t==="-"||!S.s[t]?"<td></td>":`<td><b style="background:${colOf(t)}">${ab(S.s[t])}</b></td>`).join("")}</tr>`).join("")}</table>`;
+ $("ttl").innerHTML=keys.map(k=>`<span><i style="background:${colOf(k)}"></i>${ab(S.s[k])} — ${S.s[k]}</span>`).join("")}
+/* ---------- init ---------- */
+$("hol").value="2026-10-02, 2026-10-19, 2026-10-20";
+const t0=clamp(new Date());$("today").value=key(t0);$("plan").value=key(clamp(addD(t0,14)));
+["today","plan"].forEach(id=>{$(id).min=key(START);$(id).max=key(END);$(id).onchange=render});
+document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{$("plan").value=key(clamp(addD(parse($("today").value),+b.dataset.add)));render()});
+$("inc").onchange=render;$("hol").oninput=render;
+setup();mk();show();
+</script></body></html>
